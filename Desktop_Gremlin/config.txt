@@ -1,5 +1,5 @@
 ﻿//General Settings
-START_CHAR = Cafe
+START_CHAR = Halo
 LANGUAGE_DIFF = true
 ENABLE_KEYBOARD = true
 ALLOW_ERROR_MESSAGES = true
@@ -34,7 +34,7 @@ ENABLE_MIN_RESIZE = true
 FORCE_CENTER = false
 ENABLE_MANUAL_RESIZE = true
 FORCE_FAKE_TRANSPARENT = false
-ALLOW_CACHE = false
+ALLOW_CACHE = true
 
 //Food and Item Settings
 CURRENT_ACCELERATION = 0.3
