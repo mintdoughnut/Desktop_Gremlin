@@ -70,6 +70,8 @@ public static class ConfigManager
             ["COMPANION_SCALE"] = val => { if (TryParseDoubleInvariant(val, out double v)) QuirkSettings.CompanionScale = v; },
             ["COMPANION_FOLLOW"] = val => { if (int.TryParse(val, out int v)) QuirkSettings.CompanionFollow = v; },
             ["STRAIGHT_LINE"] = val => { if (bool.TryParse(val, out bool v)) Settings.StraightLine = v; },
+            ["EMOTE3_LOOPS"] = val => { if (int.TryParse(val, out int v)) Settings.Emote3Loops = v; },
+            ["EMOTE4_LOOPS"] = val => { if (int.TryParse(val, out int v)) Settings.Emote4Loops = v; },
         };
         foreach (var line in File.ReadAllLines(path))
         {
