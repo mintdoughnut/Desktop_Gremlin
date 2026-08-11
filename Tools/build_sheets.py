@@ -103,6 +103,23 @@ def discover(root, overrides):
     return found, unknown
 
 
+def find_mixed_batches(animations, gap_seconds):
+    """Flag folders whose frames look like two capture sessions left on top of
+    each other. Re-exporting only overwrites frames the new take reaches, so a
+    shorter retake leaves the tail of the old one behind and the two silently
+    concatenate."""
+    suspect = []
+    for canon, raw, frames in animations:
+        if len(frames) < 2:
+            continue
+        times = sorted(os.path.getmtime(f) for f in frames)
+        gaps = [(times[i + 1] - times[i], i) for i in range(len(times) - 1)]
+        gap, index = max(gaps)
+        if gap > gap_seconds:
+            suspect.append((canon, raw, index + 1, len(frames) - index - 1, gap))
+    return suspect
+
+
 def union_alpha_bbox(animations):
     """Union of the non-transparent bounds across every frame of every animation."""
     box, canvas = None, None
@@ -196,6 +213,16 @@ def build(args):
             print(f"      {raw}  ({n} frames)")
         print()
 
+    mixed = find_mixed_batches(animations, args.batch_gap)
+    if mixed:
+        print("  ! Folders that look like two capture sessions merged:")
+        for _, raw, old, new, gap in mixed:
+            print(f"      {raw}: {old} older frame(s), then {new}, "
+                  f"{gap / 3600:.1f}h apart")
+        print("    Empty the folder and re-export - re-exporting only overwrites")
+        print("    the frames the new take reaches, so a shorter retake leaves the")
+        print("    tail of the previous one behind.\n")
+
     if args.crop:
         raw_box, canvas = union_alpha_bbox(animations)
         box = squarify(raw_box, canvas, args.pad)
@@ -273,6 +300,9 @@ def main():
     p.add_argument("--size", type=int, default=325, help="frame size px (default 325)")
     p.add_argument("--columns", type=int, default=10, help="frames per row (default 10)")
     p.add_argument("--pad", type=int, default=8, help="px padding around the crop")
+    p.add_argument("--batch-gap", type=float, default=1800, metavar="SECONDS",
+                   help="warn when a folder's frames split into sessions this far "
+                        "apart (default 1800; 0 disables)")
     p.add_argument("--no-crop", dest="crop", action="store_false",
                    help="frames are already tight and aligned")
     p.add_argument("--map", action="append", metavar="RAW=NAME",
