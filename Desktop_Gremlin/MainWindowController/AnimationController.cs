@@ -19,6 +19,7 @@ namespace DesktopGremlin
         private DispatcherTimer _masterTimer;
         private DateTime _nextRandomActionTime;
         private readonly Dictionary<string, int> _completedLoops = new Dictionary<string, int>();
+        private bool _closePending = false;
         private bool _wasIdleLastFrame = false;
         public bool UseStraightMovementOnly { get; set; } = true;
         private bool _movingHorizontalFirst = true;
@@ -56,16 +57,16 @@ namespace DesktopGremlin
         {
             // Repeatable Animations
             _currentFrames.Grab = PlayAnimation("Grab", "Actions", _currentFrames.Grab, _frameCounts.Grab, false);
-            _currentFrames.Emote1 = PlayAnimation("Emote1", "Emotes", _currentFrames.Emote1, _frameCounts.Emote1, false);
             _currentFrames.Idle = PlayAnimation("Idle", "Actions", _currentFrames.Idle, _frameCounts.Idle, false);
             _currentFrames.Hover = PlayAnimation("Hover", "Actions", _currentFrames.Hover, _frameCounts.Hover, false);
             _currentFrames.Sleep = PlayAnimation("Sleeping", "Actions", _currentFrames.Sleep, _frameCounts.Sleep, false);
             _currentFrames.Pat = PlayAnimation("Pat", "Actions", _currentFrames.Pat, _frameCounts.Pat, false);
             // Counted Repeat Animations
+            _currentFrames.Emote1 = PlayAnimation("Emote1", "Emotes", _currentFrames.Emote1, _frameCounts.Emote1, true, Settings.Emote1Loops);
+            _currentFrames.Emote2 = PlayAnimation("Emote2", "Emotes", _currentFrames.Emote2, _frameCounts.Emote2, true, Settings.Emote2Loops);
             _currentFrames.Emote3 = PlayAnimation("Emote3", "Emotes", _currentFrames.Emote3, _frameCounts.Emote3, true, Settings.Emote3Loops);
             _currentFrames.Emote4 = PlayAnimation("Emote4", "Emotes", _currentFrames.Emote4, _frameCounts.Emote4, true, Settings.Emote4Loops);
             // Single Repeat Animations
-            _currentFrames.Emote2 = PlayAnimation("Emote2", "Emotes", _currentFrames.Emote2, _frameCounts.Emote2, true);
             _currentFrames.Intro = PlayAnimation("Intro", "Actions", _currentFrames.Intro, _frameCounts.Intro, true);
             _currentFrames.Outro = PlayAnimation("Outro", "Actions", _currentFrames.Outro, _frameCounts.Outro, true);
             _currentFrames.Click = PlayAnimation("Click", "Actions", _currentFrames.Click, _frameCounts.Click, true);
@@ -113,13 +114,50 @@ namespace DesktopGremlin
 
             if (stateName == "Outro")
             {
-                Application.Current.Shutdown();
+                CloseAfterOutro();
+                return currentFrame;
             }
 
             _gremlinState.UnlockState();
             _gremlinState.ResetAllExceptIdle();
 
             return currentFrame;
+        }
+
+        // The outro animation is usually shorter than the goodbye voice line, and
+        // shutting down the moment it ends cuts the audio off. Hold the last frame
+        // for a beat so the sound can finish.
+        private void CloseAfterOutro()
+        {
+            if (_closePending)
+            {
+                return;
+            }
+
+            _closePending = true;
+
+            if (Settings.OutroDelay <= 0)
+            {
+                Application.Current.Shutdown();
+                return;
+            }
+
+            // SpriteManager draws frame N and returns N+1, so a wrap to zero means
+            // the final frame is already on screen. Stopping here freezes it there.
+            _masterTimer.Stop();
+
+            DispatcherTimer closeTimer = new DispatcherTimer
+            {
+                Interval = TimeSpan.FromMilliseconds(Settings.OutroDelay)
+            };
+
+            closeTimer.Tick += (s, e) =>
+            {
+                closeTimer.Stop();
+                Application.Current.Shutdown();
+            };
+
+            closeTimer.Start();
         }
 
         private void HandleCursorFollowing()
