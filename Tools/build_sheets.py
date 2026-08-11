@@ -260,7 +260,9 @@ def report_missing(counts):
         if "IDLE" in missing:
             print("  ! IDLE missing: this is the default resting animation.")
     else:
-        print("\n  All 23 reachable animations present (PAT is dead in this build).")
+        reachable = sum(len(keys) for _, keys in CONFIG_LAYOUT) - 1  # PAT is unreachable
+        print(f"\n  All {reachable} reachable animations present "
+              "(PAT is dead in this build).")
 
 
 def main():
