@@ -11,6 +11,7 @@ public static class SpriteManager
     {
         ["idle"] = "idle.png",
         ["idle2"] = "idle2.png",
+        ["hello"] = "hello.png",
         ["intro"] = "intro.png",
         ["runleft"] = "runLeft.png",
         ["runright"] = "runRight.png",

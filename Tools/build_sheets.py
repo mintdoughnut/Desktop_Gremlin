@@ -39,6 +39,7 @@ CANON = {
     "emote1": "Emotes", "emote2": "Emotes", "emote3": "Emotes", "emote4": "Emotes",
     "idle": "Actions", "runIdle": "Actions", "hover": "Actions", "grab": "Actions",
     "sleep": "Actions", "intro": "Actions", "outro": "Actions", "click": "Actions",
+    "hello": "Actions",
 }
 
 # Engine drops the "run" prefix on diagonals; UmaViewer exports tend to keep it.
@@ -55,7 +56,7 @@ CONFIG_LAYOUT = [
     ("Run Diagonal", ["UPLEFT", "UPRIGHT", "DOWNLEFT", "DOWNRIGHT"]),
     ("Emotes", ["EMOTE1", "EMOTE2", "EMOTE3", "EMOTE4"]),
     ("Walk", ["WALKDOWN", "WALKLEFT", "WALKRIGHT", "WALKUP"]),
-    ("Actions", ["GRAB", "HOVER", "IDLE", "INTRO", "CLICK",
+    ("Actions", ["GRAB", "HOVER", "IDLE", "INTRO", "CLICK", "HELLO",
                  "OUTRO", "PAT", "RUNIDLE", "SLEEP"]),
 ]
 
@@ -259,7 +260,9 @@ def report_missing(counts):
         if "IDLE" in missing:
             print("  ! IDLE missing: this is the default resting animation.")
     else:
-        print("\n  All 23 reachable animations present (PAT is dead in this build).")
+        reachable = sum(len(keys) for _, keys in CONFIG_LAYOUT) - 1  # PAT is unreachable
+        print(f"\n  All {reachable} reachable animations present "
+              "(PAT is dead in this build).")
 
 
 def main():

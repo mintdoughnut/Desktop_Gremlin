@@ -12,7 +12,7 @@
          Topmost="True"
          ResizeMode="NoResize" BorderThickness="0" BorderBrush="Black" ShowInTaskbar="True">
     <Grid  MouseRightButtonDown="SpriteImage_RightClick">
-        <Image Name="SpriteImage" Width="300" Height="300" HorizontalAlignment="Left" VerticalAlignment="Top" MouseLeftButtonDown="Canvas_MouseLeftButtonDown" MouseEnter="SpriteImage_MouseEnter" MouseLeave="SpriteImage_MouseLeave">
+        <Image Name="SpriteImage" Width="300" Height="300" HorizontalAlignment="Left" VerticalAlignment="Top" RenderOptions.BitmapScalingMode="LowQuality" MouseLeftButtonDown="Canvas_MouseLeftButtonDown" MouseEnter="SpriteImage_MouseEnter" MouseLeave="SpriteImage_MouseLeave">
             <Image.RenderTransform>
                 <ScaleTransform x:Name="SpriteFlipTransform"
                         ScaleX="1" ScaleY="1"

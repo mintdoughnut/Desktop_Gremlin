@@ -21,6 +21,7 @@ public class FrameCounts
     public int Grab { get; set; } = 0;
     public int WalkIdle { get; set; } = 0;
     public int Click { get; set; } = 0;
+    public int Hello { get; set; } = 0;
     public int Dance { get; set; } = 0;
     public int Hover { get; set; } = 0;
     public int Sleep { get; set; } = 0;
@@ -91,6 +92,7 @@ public class FrameCounts
                 case "GRAB": Grab = intValue; break;
                 case "RUNIDLE": WalkIdle = intValue; break;
                 case "CLICK": Click = intValue; break;
+                case "HELLO": Hello = intValue; break;
                 case "HOVER": Hover = intValue; break;
                 case "SLEEP": Sleep = intValue; break;
                 case "FIREL": LeftFire = intValue; break;
