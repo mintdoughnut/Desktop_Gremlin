@@ -18,6 +18,7 @@ public class AnimationStates
         { "Grab", false },
         { "WalkIdle", false },
         { "Click", false },
+        { "Hello", false },
         { "Sleeping", false },
         { "Firing_Left", false },
         { "Firing_Right", false },

@@ -22,6 +22,7 @@ public static class Settings
     public static int SpawnDistance { get; set; } = 0;
     public static int Emote3Loops { get; set; } = 3;
     public static int Emote4Loops { get; set; } = 3;
+    public static int HelloLoops { get; set; } = 1;
     public static double FollowRadius { get; set; } = 0;
     public static double SpriteSize { get; set; } = 1.0;
     public static double CompanionScale { get; set; } = 0;

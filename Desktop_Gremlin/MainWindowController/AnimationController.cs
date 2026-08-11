@@ -69,6 +69,7 @@ namespace DesktopGremlin
             _currentFrames.Intro = PlayAnimation("Intro", "Actions", _currentFrames.Intro, _frameCounts.Intro, true);
             _currentFrames.Outro = PlayAnimation("Outro", "Actions", _currentFrames.Outro, _frameCounts.Outro, true);
             _currentFrames.Click = PlayAnimation("Click", "Actions", _currentFrames.Click, _frameCounts.Click, true);
+            _currentFrames.Hello = PlayAnimation("Hello", "Actions", _currentFrames.Hello, _frameCounts.Hello, true, Settings.HelloLoops);
             HandleCursorFollowing();
             HandleRandomActions();
         }
@@ -272,9 +273,22 @@ namespace DesktopGremlin
                 switch (action)
                 {
                     case 0:
-                        _currentFrames.Click = 0;
+                        // Prefer the dedicated greeting sheet, but fall back to the
+                        // click animation for characters that do not ship one.
+                        bool hasHello = _frameCounts.Hello > 0;
+                        string greeting = hasHello ? "Hello" : "Click";
+
+                        if (hasHello)
+                        {
+                            _currentFrames.Hello = 0;
+                        }
+                        else
+                        {
+                            _currentFrames.Click = 0;
+                        }
+
                         _gremlinState.UnlockState();
-                        _gremlinState.SetState("Click");
+                        _gremlinState.SetState(greeting);
                         MediaManager.PlaySound("mambo.wav", Settings.StartingChar);
                         _gremlinState.LockState();
                         break;

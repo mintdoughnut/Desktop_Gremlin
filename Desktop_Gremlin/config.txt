@@ -17,6 +17,7 @@ FOLLOW_RADIUS = 300.0
 //Emote Settings
 EMOTE3_LOOPS = 3
 EMOTE4_LOOPS = 3
+HELLO_LOOPS = 1
 
 //Movement Settings
 START_BOTTOM = false

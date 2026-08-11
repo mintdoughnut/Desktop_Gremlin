@@ -22,6 +22,7 @@ public class CurrentFrames
     public int Grab { get; set; } = 0;
     public int WalkIdle { get; set; } = 0;
     public int Click { get; set; } = 0;
+    public int Hello { get; set; } = 0;
     public int Dance { get; set; } = 0;
     public int Hover { get; set; } = 0;
     public int Sleep { get; set; } = 0;

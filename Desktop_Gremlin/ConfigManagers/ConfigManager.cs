@@ -72,6 +72,7 @@ public static class ConfigManager
             ["STRAIGHT_LINE"] = val => { if (bool.TryParse(val, out bool v)) Settings.StraightLine = v; },
             ["EMOTE3_LOOPS"] = val => { if (int.TryParse(val, out int v)) Settings.Emote3Loops = v; },
             ["EMOTE4_LOOPS"] = val => { if (int.TryParse(val, out int v)) Settings.Emote4Loops = v; },
+            ["HELLO_LOOPS"] = val => { if (int.TryParse(val, out int v)) Settings.HelloLoops = v; },
         };
         foreach (var line in File.ReadAllLines(path))
         {
